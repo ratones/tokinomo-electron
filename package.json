@@ -28,10 +28,16 @@
     "e2e": "mocha temp/e2e.js --require source-map-support/register",
     "test": "npm run unit && npm run e2e",
     "start": "node build/start.js",
-    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
+    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
-    "fs-jetpack": "^1.0.0"
+    "adm-zip": "^0.4.7",
+    "fs-jetpack": "^1.0.0",
+    "jquery": "^3.3.1",
+    "node-windows": "^0.1.14",
+    "pixelmatch": "^4.0.2",
+    "pngjs": "^3.3.1",
+    "videojs-record": "^2.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.5",

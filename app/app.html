@@ -1,12 +1,21 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Electron Boilerplate</title>
+  <link rel="stylesheet" href="css/photon.min.css">
+  <link href="libs/video-js.min.css" rel="stylesheet">
+  <link href="libs/css/videojs.record.css" rel="stylesheet">
+  <script src="libs/RecordRTC.min.js"></script>
+  <script src="libs/video.min.js"></script>
+  <script src="libs/videojs.record.js"></script>
+  <script src="libs/prompt.js"></script>
 </head>
+
 <body>
 
-  <div id="app" class="container" style="display: none;">
+  <!-- <div id="app" class="container" style="display: none;">
     <h1 id="greet"></h1>
     <p>
       Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this <strong id="os"></strong> machine.
@@ -23,5 +32,237 @@
   </div>
 
   <script src="app.js"></script>
-</body>
+</body> -->
+
+  <body>
+    <div class="window" id="app" style="display: none;">
+
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header">
+        <h1 class="title">Tokinomo device</h1>
+        <div class="toolbar-actions">
+          <div class="btn-group">
+            <button class="btn btn-default">
+              <span class="icon icon-cog"></span>
+            </button>
+            <button class="btn btn-primary">
+              <span class="icon icon-play" id="btnStartRoutine"></span>
+            </button>
+            <button class="btn btn-negative">
+              <span class="icon icon-stop"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="tab-group" id="app-tabs"></div>
+      <!-- Your app's content goes inside .window-content -->
+      <div class="window-content">
+        <div id="app-console" class="show">
+          <div class="device-status">
+            <div class="video-control">
+              <video id="myVideo" class="video-js vjs-default-skin"></video>
+            </div>
+            <div class="device-logging">
+              <div id="deviceLog"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="app-settings" class="hide">
+          <div>
+            <div style="display:flex">
+              <fieldset>
+                <legend>General</legend>
+                <div>
+                  <label>Fragile product:</label>
+                  <input type="checkbox" id="FRAGILE_PRODUCT" />
+                </div>
+                <div>
+                  <label>Swing amplitude:</label>
+                  <input type="text" id="SWING_MAX_RETRACT" />
+                </div>
+                <div>
+                  <label>Range max:</label>
+                  <input type="text" id="RANGE_MAX_POSITION" />
+                </div>
+                <div>
+                  <label>Continuos move:</label>
+                  <input type="checkbox" id="CONTINUOS_MOVE" />
+                </div>
+                <div>
+                  <label>Use motion sensor:</label>
+                  <input type="checkbox" id="USE_MOTION_SENSOR" />
+                </div>
+                <div>
+                  <label>Random play:</label>
+                  <input type="checkbox" id="RANDOM_PLAY" />
+                </div>
+                <div>
+                  <label>Use clock reset:</label>
+                  <input type="checkbox" id="USE_CLOCK_RESET" />
+                </div>
+                <div>
+                  <label>Clock start:</label>
+                  <input type="text" id="CLOCK_START_TIME" />
+                </div>
+                <div>
+                  <label>Clock end:</label>
+                  <input type="text" id="CLOCK_END_TIME" />
+                </div>
+                <div>
+                  <label>UTC diff:</label>
+                  <input type="text" id="UTC_DIFF" />
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Motor</legend>
+                <div>
+                  <label>Start direction:</label>
+                  <select name="direction" id="MOTION_STARTING_DIR" value="1">
+                    <option value="1">Forward</option>
+                    <option value="0">Backward</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Keep on:</label>
+                  <input type="checkbox" id="KEEP_MOTOR_ON" />
+                </div>
+                <div>
+                  <label>Speed:</label>
+                  <select name="speed" id="SPEED" value="medium">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+              </fieldset>
+            </div>
+            <div>
+              <fieldset>
+                <legend>Movement</legend>
+                <div>
+                  <label>Use pattern:</label>
+                  <input type="checkbox" id="USE_PATTERN_MOVEMENT" />
+                </div>
+                <div>
+                  <label>Use random:</label>
+                  <input type="checkbox" id="USE_RANDOM_MOVEMENT" />
+                </div>
+                <div>
+                  <label>Use delay:</label>
+                  <input type="checkbox" id="USE_DELAY" />
+                </div>
+                <div>
+                  <label>Delay value:</label>
+                  <input type="text" id="DELAY_INTERVAL" />
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>LED</legend>
+                <div>
+                  <label>Use light:</label>
+                  <input type="checkbox" id="USE_BLITZ" />
+                </div>
+                <div>
+                  <label>Light count:</label>
+                  <input type="text" id="BLITZ_COUNT" />
+                </div>
+                <div>
+                  <label>Light delay(ms):</label>
+                  <input type="text" id="BLITZ_DELAY" />
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Detection</legend>
+                <div>
+                  <label>Pause between(ms):</label>
+                  <input type="text" id="WAITING_TIME" />
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="settings-buttons">
+            <button id="btnSaveLocal">Save Local</button>
+            <button id="btnSaveServer">Save Server</button>
+          </div>
+        </div>
+        <div id="app-test" class="hide">
+          <fieldset>
+            <legend>Device test</legend>
+            <div class="device-test">
+              <button class="btn btn-warning" id="btnResetDevice">Reset device</button>
+              <fieldset>
+                <legend>Movement</legend>
+                <div class="device-movement">
+                  <div class="movement-commands">
+                    <fieldset class="device-test">
+                      <legend>Routine movements</legend>
+                      <button class="btn btn-default" id="btnExtend">Extend</button>
+                      <button class="btn btn-default" id="btnGoHome">Go home</button>
+                      <button class="btn btn-default" id="btnBounceEven">Bounce even</button>
+                      <button class="btn btn-default" id="btnBounceRandom">Bounce random</button>
+                      <button class="btn btn-default" id="btnPattern">Pattern move</button>
+                    </fieldset>
+                  </div>
+                  <div class="movement-settings">
+                    <fieldset class="device-test">
+                      <legend>Custom move</legend>
+                      <label for="speed">Speed:</label>
+                      <select name="speed" id="speed" value="medium">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                      <label for="direction">Direction:</label>
+                      <select name="direction" id="direction" value="1">
+                        <option value="1">Forward</option>
+                        <option value="0">Backward</option>
+                      </select>
+                      <label for="steps">Steps:</label>
+                      <input type="text" id="steps" name="steps" />
+                      <button class="btn btn-primary" id="btnMove">Move!</button>
+                    </fieldset>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Device LED</legend>
+                <div class="device-led device-test">
+                  <label for="checkstatus">On/Off:</label>
+                  <input type="checkbox" name="checkstatus" id="checkstatus" />
+                  <label>LED status:</label>
+                  <div class="led-status" id="ledstatus"></div>
+                </div>
+              </fieldset>
+
+              <fieldset class="device-test">
+                <legend>Device audio files</legend>
+                <div class="device-audio device-test">
+                  <audio id="myAudio" controls disabled></audio>
+                  <!-- <video src="D:/Projects/Python/Tuts/out.webm" controls></video> -->
+                  <label for="audioSelect">Select file:</label>
+                  <select id="audioSelect"></select>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Device Real Time Clock</legend>
+                <div class="device-rtc device-test">
+                  <button id="btnReadRTC" class="btn btn-positive">Read RTC</button>
+                  <button id="btnWriteRTC" class="btn btn-negative">Write RTC(system date time!!!)</button>
+                  <p>RTC DateTime:
+                    <span style="font-size:12px" id="rtcread"></span>
+                  </p>
+                </div>
+              </fieldset>
+            </div>
+          </fieldset>
+        </div>
+        <div id="app-patterns" class="edit-patterns hide">
+          Patterns page
+        </div>
+      </div>
+      <script src="app.js"></script>
+  </body>
+
 </html>

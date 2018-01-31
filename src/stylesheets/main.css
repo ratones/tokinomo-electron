@@ -6,6 +6,10 @@ body {
   padding: 0;
 }
 
+#app{
+  margin: 0 auto;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -19,6 +23,96 @@ a {
   color: #cb3837;
 }
 
+fieldset>div{
+  margin: 2px 0;
+}
+
 .container {
   text-align: center;
+}
+
+.device-status{
+  display:flex;
+}
+.device-audio{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.video-control{
+  flex:0 0 auto;
+  width:350px;
+  display:none;
+}
+
+#deviceLog{
+  width:600px;
+  /* height:240px; */
+  overflow: auto;
+}
+
+.disabled{
+  opacity: .7;
+}
+
+.edit-settings{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.edit-settings div{
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: stretch;
+  padding: 2px;
+}
+
+.edit-settings label{
+ margin-right:20px;
+ width: 160px;
+}
+.edit-settings input{
+ /* margin-left:150px; */
+}
+
+.settings-buttons{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.file-patterns{
+  display:table;
+}
+.patern-row{
+  display:table-row;
+}
+.patern-column{
+  display:table-cell;
+}
+
+.show{
+  display:block;
+}
+.hide{
+  display:none;
+}
+
+.window-content{
+  justify-content: center;
+  height: calc(100% - 110px);
+}
+
+label{
+  display:inline-flex;
+  margin-bottom: 0;
+  width:110px;
+}
+
+input[type="text"],select{
+  width:115px;
+  height: 23px;
 }
