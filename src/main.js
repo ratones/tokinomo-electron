@@ -6,6 +6,7 @@ import SelfTest from './selftest/selftest';
 import HttpClient from './network/client';
 import {Status,Settings, Patterns} from './datamodels/status';
 import { start } from 'repl';
+import Arduino from './arduino/arduino';
 
 class Main{
   constructor(){
@@ -56,7 +57,7 @@ class Main{
     console.log('No internet connection');
     //try to connect with GPRS 10 times
     let checkinterval = null;
-    // Arduino.powerUSB().then(() => {
+    Arduino.powerUSB().then(() => {
         console.log('Start GPRS connection');
         setTimeout(() => {
             client.checkConnection().catch(() => {
@@ -80,7 +81,7 @@ class Main{
                 self.poolServer();
             });
         }, 30000);
-    // });
+    });
   }
 
   startDevice(){
@@ -105,7 +106,7 @@ class Main{
     formData.append('battery', Status.battery);
     formData.append('activations', Settings.persistKey('activations'));
     formData.append('id', deviceID);
-    let fileOfBlob = new File([mov.video], 'Device' + deviceID + '.mp4');
+    let fileOfBlob = new File([mov.video], deviceID + '.ogg');
     formData.append('files', fileOfBlob);
     client.postFormData(formData).then((response)=>{
       console.log(response);

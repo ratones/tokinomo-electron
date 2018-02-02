@@ -227,12 +227,22 @@
                 </div>
               </fieldset>
               <fieldset>
-                <legend>Device LED</legend>
+                <legend>Sensors</legend>
                 <div class="device-led device-test">
-                  <label for="checkstatus">On/Off:</label>
+                  <label for="checkstatus">LED On/Off:</label>
                   <input type="checkbox" name="checkstatus" id="checkstatus" />
-                  <label>LED status:</label>
-                  <div class="led-status" id="ledstatus"></div>
+                </div>
+                <div class="device-led device-test">
+                  <label for="checkfan">Fan On/Off:</label>
+                  <input type="checkbox" name="checkfan" id="checkfan" />
+                </div>
+                <div class="device-led device-test">
+                  <label for="checksound">Sound On/Off:</label>
+                  <input type="checkbox" name="checksound" id="checksound" />
+                </div>
+                <div class="device-led device-test">
+                  <label for="checkusb">USB On/Off:</label>
+                  <input type="checkbox" name="checkusb" id="checkusb" />
                 </div>
               </fieldset>
 
@@ -262,6 +272,11 @@
           Patterns page
         </div>
       </div>
+      <footer class="toolbar toolbar-footer">
+        Platform: <strong id="os"></strong>
+        Environment: <strong id="env"></strong>
+        Electron version: <strong id="electron-version"></strong>
+      </footer>
       <script src="app.js"></script>
   </body>
 

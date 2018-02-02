@@ -5,6 +5,7 @@ import "./proxy";
 import "./helpers/context_menu.js";
 import "./helpers/external_links.js";
 
+import Arduino from './arduino/arduino'
 // ----------------------------------------------------------------------------
 // Everything below is just to show you how it works. You can delete all of it.
 // ----------------------------------------------------------------------------
@@ -33,12 +34,30 @@ const osMap = {
   linux: "Linux"
 };
 
-Main.openTab('console');
+
 
 document.querySelector("#app").style.display = "block";
+Arduino.setPlayer(document.querySelector('#myAudio'));
+Main.openTab('console');
+Arduino.initialize().then(()=>{
+  Main.main(); // start the program after Arduino is ready
+});
+
+window.onbeforeunload = (e) => {
+  // e.preventDefault();
+  Arduino.stopProcedure()
+  .then(() => {
+    remote.getCurrentWindow().destroy(); // 'remote' being electron.remote here
+  })
+  .catch(()=>{
+    remote.getCurrentWindow().destroy();
+  });
+
+  e.returnValue = true;
+  // prevent the window from closing immediately
+};
 // document.querySelector("#greet").innerHTML = greet();
-// document.querySelector("#os").innerHTML = osMap[process.platform];
+document.querySelector("#os").innerHTML = osMap[process.platform];
 // document.querySelector("#author").innerHTML = manifest.author;
-// document.querySelector("#env").innerHTML = env.name;
-// document.querySelector("#electron-version").innerHTML =
-//   process.versions.electron;
+document.querySelector("#env").innerHTML = env.name;
+document.querySelector("#electron-version").innerHTML =   process.versions.electron;

@@ -5,12 +5,14 @@
 
 import path from "path";
 import url from "url";
-import { app, Menu, ipcMain } from "electron";
+import { app, Menu, ipcMain,remote } from "electron";
 import { devMenuTemplate } from "./menu/dev_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
 import { windowMenuTemplate } from "./menu/window_menu_template";
 import { deviceMenuTemplate } from "./menu/device_menu_template";
 import createWindow from "./helpers/window";
+
+import Arduino from './arduino/arduino';
 
 
 // Special module holding environment variables which you declared
@@ -25,6 +27,8 @@ const setApplicationMenu = () => {
   // }
   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
+
+var canQuit = false;
 
 /**PROMPT REPLACEMENT */
 var promptResponse
@@ -88,8 +92,21 @@ app.on("ready", () => {
   if (env.name === "development") {
     mainWindow.openDevTools();
   }
+  // mainWindow.on('close',(e)=>{
+  //   while(!canQuit){
+  //     ;
+  //   }
+  //   app.quit();
+  // })
 });
 
-app.on("window-all-closed", () => {
-  app.quit();
-});
+// app.on("window-all-closed", (e) => {
+//   e.preventDefault();
+//   Arduino.stopProcedure().then(()=>{
+//     app.quit();
+//   })
+// });
+
+
+
+
