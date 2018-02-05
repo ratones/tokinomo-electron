@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "bleno": "^0.5.0",
     "fs-jetpack": "^1.0.0",
     "jquery": "^3.3.1",
     "node-windows": "^0.1.14",

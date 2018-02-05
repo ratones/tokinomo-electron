@@ -45,7 +45,7 @@ Arduino.initialize().then(()=>{
 
 window.onbeforeunload = (e) => {
   // e.preventDefault();
-  Arduino.stopProcedure()
+  Arduino.stop_routine()
   .then(() => {
     remote.getCurrentWindow().destroy(); // 'remote' being electron.remote here
   })

@@ -29,6 +29,7 @@ export const Settings = {
   },
 
   get(key) {
+    if(this.data.length == 0) this.loadSettings();
     let s = this.data.find((s) => { return s.name === key });
     if (s.val === 'true') return true;
     if (s.val === 'false') return false;

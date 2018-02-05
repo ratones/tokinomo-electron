@@ -21,7 +21,8 @@ class Main{
       this.openTab(arg.window)
     })
 
-    document.querySelector('#btnStartRoutine').addEventListener('click',this.main.bind(this));
+    document.querySelector('#btnStartRoutine').addEventListener('click',this.startDevice.bind(this));
+    document.querySelector('#btnStopRoutine').addEventListener('click',this.stopDevice.bind(this));
   }
 
   main(){
@@ -88,12 +89,14 @@ class Main{
   }
 
   startDevice(){
-    console.info('Device started on ' + new Date().toDateString())
+    console.info('Device started on ' + new Date().toDateString());
+    Arduino.start_routine();
   }
 
   stopDevice(){
     this.canStartRoutine = false;
-    console.error('Device stopped on ' + new Date().toDateString())
+    console.error('Device stopped on ' + new Date().toDateString());
+    Arduino.stop_routine();
   }
 
 

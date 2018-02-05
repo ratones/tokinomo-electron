@@ -8,8 +8,8 @@ class Serial {
     }
 
     attachCommand(command, identifier, callback) {
-        const cmd = { command, identifier, callback };
-        const can_attach = true;
+        let cmd = { command, identifier, callback };
+        let can_attach = true;
        this.commands.forEach(c=> {
             if (c['command'] == command && c['identifier'] == identifier) {
                 console.log("Command already attached");

@@ -1,6 +1,6 @@
 import Serial from './serial';
 import fs from 'fs';
-import { Settings } from './../datamodels/status';
+import { Settings,Patterns } from './../datamodels/status';
 class Arduino {
   constructor() {
     this.melodyIndex = 0;
@@ -11,6 +11,7 @@ class Arduino {
     let self = this;
     return new Promise((resolve) => {
       Serial.initialize().then(() => {
+        this.timeoutPassed = true;
         self.listFiles().then(resolve);
       });
     })
@@ -197,6 +198,28 @@ class Arduino {
     let amplitude = Settings.get('SWING_MAX_RETRACT');
     Serial.stepper_bounce_rand(speed, accel, accel, amplitude, amplitude);
   }
+  patternMove() {
+    let self = this;
+    let patterns = Patterns.getPatterns();
+    let speed = Settings.get('SPEED');
+    let accel = Settings.get('ACCELERATION'); 
+    let playingFile = this.files[this.melodyIndex];
+    let pattern = patterns.find((p) => { return p.filename == playingFile });
+    let sets = pattern.pattern;
+    let chain = Promise.resolve();
+    let commands = [];
+    for (let index = 0; index < sets.length; index++) {
+      const p = sets[index];
+      let delay = p.pause;
+      let steps = Math.abs(Number(p.distance));
+      let dir = Number(p.distance) >= 0 ? 1 : 0;
+      console.log(index);
+      commands.push(Serial.stepper_move.bind(Serial,dir, steps, speed, accel, accel, delay));
+    }
+    for (const func of commands) {
+      chain = chain.then(func);
+    }
+  }
 
   playFinnished() {
     this.goHome().then(()=>{
@@ -233,10 +256,18 @@ class Arduino {
     this.playFile(this.melodyIndex);
     this.isPlaying = true;
   }
+  runPatternRoutine() {
+    this.extendMax().then(() => {
+      if (Settings.get('USE_BLITZ')) this.blinkLED();
+      this.patternMove();
+    });
+    this.playFile(this.melodyIndex);
+    this.isPlaying = true;
+  }
 
   start_routine() {
     if(Settings.get('USE_MOTION_SENSOR')){
-      Serial.attachCommand("1", 123, this.sensor_received);
+      Serial.attachCommand("1", 123, this.sensor_received.bind(this));
     }
     else{
       // run loop
@@ -244,8 +275,10 @@ class Arduino {
   }
 
   stop_routine(self) {
-    this.goHome();
-    Board.detach_command("1", 123)
+    return new Promise((resolve)=>{
+      this.goHome().then(resolve);
+      Serial.detach_command("1", 123)
+    });
   }
 
   sensor_received(value) {
@@ -275,6 +308,16 @@ class Arduino {
     }
   }
 
+  writeActivation() {
+    let activations = Settings.persistKey('activations');
+    if (!activations) activations = 0;
+    activations++;
+    let dt = new Date();
+    let date = dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear();
+    let time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
+    fs.appendFileSync('C:/Device/activations.txt', `\r\n${activations}\t${date}\t${time}`);
+    Settings.persistKey('activations', activations);
+  }
 
 }
 export default new Arduino();
