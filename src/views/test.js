@@ -28,6 +28,10 @@ export default class Test {
     document.querySelector('#btnWriteRTC').addEventListener('click', this.writeRTC.bind(this));
   }
 
+  dispose(){
+
+  }
+
   loadAudioFiles() {
     let self = this;
     this.files = [];

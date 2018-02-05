@@ -33,7 +33,6 @@
   "dependencies": {
     "adm-zip": "^0.4.7",
     "fs-jetpack": "^1.0.0",
-    "johnny-five": "^0.13.0",
     "jquery": "^3.3.1",
     "node-windows": "^0.1.14",
     "pixelmatch": "^4.0.2",

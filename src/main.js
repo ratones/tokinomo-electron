@@ -10,6 +10,9 @@ import Arduino from './arduino/arduino';
 
 class Main{
   constructor(){
+    this.testTab = null;
+    this.settingsTab = null;
+    this.patternsTab = null;
     this.checkRoutineInterval = null;
     this.canStartRoutine = false;
     this.serverDateTimeSet = false;
@@ -185,7 +188,7 @@ class Main{
   openTab(name) {
     let self = this;
     if (document.querySelector(`#${name}-tab`)) {
-      this.setActiveTab(name)
+      this.setActiveTab(name);
       return;
     }
     let markup = `<div class="tab-item active" id="${name}-tab" target="app-${name}">
@@ -206,7 +209,21 @@ class Main{
     event.stopImmediatePropagation()
     this.setActiveTab('console')
     let tab = document.querySelector(`#${name}-tab`)
-    tab.parentNode.removeChild(tab)
+    tab.parentNode.removeChild(tab);
+    // switch(name){
+    //   case 'test':
+    //     this.testTab.dispose();
+    //     this.testTab = null;
+    //   break;
+    //   case 'settings':
+    //     this.settingsTab.dispose();
+    //     this.settingsTab = null;
+    //   break
+    //   case 'patterns':
+    //     this.patternsTab.dispose();
+    //     this.patternsTab = null;
+    //   break
+    // }
   }
   setActiveTab(name) {
     let tab = document.querySelector(`#${name}-tab`);
@@ -223,16 +240,23 @@ class Main{
 
     switch(name){
       case 'test':
-        let testClass = new Test();
-        testClass.enableControls();
+        if(!this.testTab){
+          this.testTab = new Test();
+        }
+        this.testTab.enableControls();
       break;
       case 'settings':
+        if(!this.settingsTab){
+          this.settingsTab = DeviceSettings;
+        }
         DeviceSettings.bindValues();
+
       break
       case 'patterns':
-        let pv = new PatternsView();
-        pv.buildView();
-      // DeviceSettings.bindValues();
+        if(!this.patternsTab){
+          this.patternsTab = new PatternsView();
+        }
+        this.patternsTab.buildView();
       break
     }
   }
