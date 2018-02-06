@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import CamHandler from './webcam';
 import { Status, Settings } from './../datamodels/status';
+import Arduino from './../arduino/arduino';
 
 export default class SelfTest {
   constructor() {
@@ -18,7 +19,9 @@ export default class SelfTest {
       this.checkIntegrity().then((result) => {
         Status.integrity = result ? 'Passed!' : 'Failed!';
         this.checkSound().then((result) => {
+          Arduino.stopPlay();
           Status.sound = result ? 'Passed!' : 'Failed!';
+          Arduino.extendMax();
           this.recordVideo().then((videofile) => {
             resolve(videofile);
           });
@@ -44,6 +47,7 @@ export default class SelfTest {
   checkSound() {
     let self = this;
     return new Promise((resolve, reject) => {
+      Arduino.playPath('C:/Device/selftest.mp3');
       this.processAudio().then((res) => {
         if (res) {
           let interv = setInterval(() => {

@@ -47,6 +47,16 @@ class Arduino {
     this.player.src = 'C:/Device/Files/' + this.files[index];
     this.player.play();
   }
+  playPath(file) {
+    this.soundOn()
+    this.player.src = file;
+    this.player.play();
+  }
+
+  stopPlay(){
+    this.soundOff()
+    this.player.pause();
+  }
 
 
   /***SENSORS PINS */
@@ -148,10 +158,10 @@ class Arduino {
     return Serial.readRTC();
   }
   writeRTC(date) {
-    Serial.writeRTC(date);
+    Serial.writeRTC();
   }
   setAlarm(date) {
-    Serial.setAlarm(date);
+    Serial.setRTCAlarm(date);
   }
 
   /**MOVES */
@@ -202,7 +212,7 @@ class Arduino {
     let self = this;
     let patterns = Patterns.getPatterns();
     let speed = Settings.get('SPEED');
-    let accel = Settings.get('ACCELERATION'); 
+    let accel = Settings.get('ACCELERATION');
     let playingFile = this.files[this.melodyIndex];
     let pattern = patterns.find((p) => { return p.filename == playingFile });
     let sets = pattern.pattern;
@@ -277,7 +287,8 @@ class Arduino {
   stop_routine(self) {
     return new Promise((resolve)=>{
       this.goHome().then(resolve);
-      Serial.detach_command("1", 123)
+      Serial.detach_command("1", 123);
+      setTimeout(resolve,5000);
     });
   }
 

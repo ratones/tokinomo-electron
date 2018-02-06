@@ -38,9 +38,15 @@ class Main{
       }
       else{
         console.log('No internet connection!');
+        self.startDevice();
         self.tryUSBConnect();
       }
     })
+    .catch(ex=>{
+      console.log('No internet connection!');
+      self.startDevice();
+      self.tryUSBConnect();
+    });
   }
 
   selfCheck(){
@@ -61,11 +67,12 @@ class Main{
     console.log('No internet connection');
     //try to connect with GPRS 10 times
     let checkinterval = null;
-    Arduino.powerUSB().then(() => {
+    Arduino.usbOn().then(() => {
         console.log('Start GPRS connection');
         setTimeout(() => {
-            client.checkConnection().catch(() => {
-                // try every 10 seconds
+            client.checkConnection().then((res) => {
+                if(!res){
+                  // try every 10 seconds
                 checkinterval = setInterval(() => {
                     tryes++;
                     if (tryes > 10) {
@@ -80,9 +87,24 @@ class Main{
                         }
                     });
                 }, 10000);
-
-            }).then(() => {
+              }else{
                 self.poolServer();
+              }
+            }).catch(() => {
+              checkinterval = setInterval(() => {
+                tryes++;
+                if (tryes > 10) {
+                    clearInterval(checkinterval);
+                    console.log('No GPRS connection');
+                }
+                client.checkConnection().then(res => {
+                    if (res) {
+                        clearInterval(checkinterval);
+                        console.log('GPRS connection established');
+                        self.poolServer();
+                    }
+                });
+            }, 10000);
             });
         }, 30000);
     });

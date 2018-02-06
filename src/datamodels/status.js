@@ -1,6 +1,7 @@
 import fs from 'fs';
 import HttpClient from './../network/client';
-import sys from 'node-windows';
+//import sys from 'node-windows';
+import cp from 'child_process';
 
 export const Status = {
   sound: 'No data',
@@ -56,9 +57,18 @@ export const Settings = {
     let d = date.getDate();
     let mt = date.getMonth();
     let y = date.getFullYear();
-    sys.elevate(`setdt.bat ${h}:${m}:${s} ${d}/${mt}/${y}`, (err) => {
-      console.log(err)
-    });
+    // sys.elevate(`setdt.bat ${h}:${m}:${s} ${d}/${mt}/${y}`, (err) => {
+    //   console.log(err)
+    // });
+    if(process.platform == 'win32'){
+      cp.exec(`setdt.bat ${h}:${m}:${s} ${d}/${mt}/${y}`, (err) => {
+        console.log(err)
+      });
+    }else{
+      cp.exec(`setdt.sh ${h}:${m}:${s} ${d}/${mt}/${y}`, (err) => {
+        console.log(err)
+      });
+    }
   },
   resetDevice() {
     fs.unlink('C:/Device/reference.png');

@@ -90,7 +90,7 @@ class Serial {
             // # send command to arduino and attach a callback to get the response
             self.attachCommand('2', identifier, (val) => {
                 self.detach_command('2', identifier);
-                resolve(val);
+                resolve(val[0]);
             });
             self.send_command('2', [analog_sensors[sensor]])
         });
@@ -104,7 +104,7 @@ class Serial {
             // # send command to arduino and attach a callback to get the response
             self.attachCommand('3', identifier, (val) => {
                 self.detach_command('3', identifier);
-                resolve(val);
+                resolve(val[0]);
             });
             self.send_command('3', [sensor]);
         });
@@ -116,6 +116,29 @@ class Serial {
     write_digital(sensor, value) {
         this.send_command('4', [sensor, value]);
     }
+
+    readRTC(){
+      let self = this;
+      let value;
+      // # generate a temporary identifier for command
+      let identifier = Math.random() * 1000;
+      return new Promise((resolve, reject) => {
+          // # send command to arduino and attach a callback to get the response
+          self.attachCommand('10', identifier, (val) => {
+              self.detach_command('10', identifier);
+              resolve(val);
+          });
+          self.send_command('10', [0]);
+      });
+    }
+    writeRTC(){
+      let datetime = new Date();
+      this.send_command('11', [datetime.getDate(), datetime.getMonth(), datetime.getFullYear(), datetime.getHours(), datetime.getMinutes(), datetime.getSeconds()]);
+    }
+    setRTCAlarm(date){
+      this.send_command('12', [date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate()]);
+    }
+
     /**STEPPER */
     stepper_move(direction,steps,speed,accel,decel=0,delay=0){
         let self = this;
@@ -142,11 +165,11 @@ class Serial {
             this.send_command('7',[speed,accel,decel])
         });
     }
-    
+
     stepper_bounce(speed,accel,decel,amplitude){
         this.send_command('8',[speed,accel,decel,amplitude]);
     }
-    
+
     stepper_bounce_rand(speed,accel,decel,maxamplitude,minamplitude){
         this.send_command('9',[speed,accel,decel,maxamplitude,minamplitude])
     }
