@@ -41,10 +41,10 @@ export default class Test {
     });
     self.audioSel.innerHTML = '';
     this.files = ipcRenderer.sendSync('sync-filelist','files');
-    // fs.readdir('C:/Device/Files', (err, f) => {
+    // fs.readdir(window.localPath + 'Files', (err, f) => {
       this.files.forEach(file => {
         let opt = document.createElement('option');
-        opt.value = 'C:/Device/Files/' + file;
+        opt.value = window.localPath + 'Files/' + file;
         opt.innerHTML = file;
         self.files.push(file);
         self.audioSel.appendChild(opt);
@@ -95,9 +95,9 @@ export default class Test {
 
   resetDevice() {
     Settings.resetDevice();
-    // fs.unlink('C:/Device/reference.png');
-    // fs.unlink('C:/Device/compare.png');
-    // fs.unlink('C:/Device/activations.txt');
+    // fs.unlink(window.localPath + 'reference.png');
+    // fs.unlink(window.localPath + 'compare.png');
+    // fs.unlink(window.localPath + 'activations.txt');
     // DeviceSettings.persistKey('activations', '0');
   }
 
@@ -150,7 +150,7 @@ export default class Test {
     // Arduino.bounceRandom();
   }
   getFileIndex() {
-    let file = this.audioSel.value.replace('C:/Device/Files/', '');
+    let file = this.audioSel.value.replace(window.localPath + 'Files/', '');
     let fileIndex = this.files.indexOf(file);
     return fileIndex;
   }

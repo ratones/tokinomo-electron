@@ -56,7 +56,7 @@ export default class HttpClient {
       let deviceID = Settings.persistKey('deviceID');
       let formData = new FormData();
       formData.append('id', deviceID);
-      let blob = fs.readFileSync('C:/Device/activations.txt');
+      let blob = fs.readFileSync(window.localPath + 'activations.txt');
       let dt = new Date();
       let date = String(dt.getDate()) + String((dt.getMonth() + 1)) + String(dt.getFullYear()) + '_' + String(dt.getHours()) + String(dt.getMinutes()) + String(dt.getSeconds());
       let fileOfBlob = new File([blob], 'Activations' + deviceID + '_' + date + '.txt');
@@ -176,9 +176,9 @@ export default class HttpClient {
             console.log('Writing file...');
             fs.writeFileSync(filepath, Buffer(new Uint8Array(this.result)));
             console.log('Unpacking melodies...');
-            self.deleteDirectory('C:/Device/Files').then(() => {
+            self.deleteDirectory(window.localPath + 'Files').then(() => {
               let zp = new AdmZip(filepath);
-              zp.extractAllTo('C:/Device/Files', true);
+              zp.extractAllTo(window.localPath + 'Files', true);
               resolve();
             });
           };

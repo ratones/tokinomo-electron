@@ -6,28 +6,28 @@ import pixelmatch from 'pixelmatch';
 const PNG = png.PNG;
 
 export const listFiles = () => {
-  let files = fs.readdirSync('C:/Device/Files');
+  let files = fs.readdirSync(window.localPath + 'Files');
   console.log(files)
   return files;
 }
 export const getSettings = ()=>{
-  let settings = fs.readFileSync('C:/Device/settings.json')
+  let settings = fs.readFileSync(window.localPath + 'settings.json')
   return JSON.parse(settings);
 }
 
 export const compareImages = (base64Data)=>{
-  fs.exists('C:/Device/reference.png', (err) => {
+  fs.exists(window.localPath + 'reference.png', (err) => {
     if (!err) {
       console.log('reference not found!')
-      fs.writeFile("C:/Device/reference.png", base64Data, 'base64', function (err) {
+      fs.writeFile(window.localPath + "reference.png", base64Data, 'base64', function (err) {
         BrowserWindow.getFocusedWindow().webContents.send('integrity-checked',{result:true})
       });
     } else {
       console.log('reference found')
-      fs.writeFile("C:/Device/compare.png", base64Data, 'base64', function (err) {
+      fs.writeFile(window.localPath + "compare.png", base64Data, 'base64', function (err) {
         // Util.log('Picture taken. Comparing images...');
-        let img1 = fs.createReadStream('C:/Device/reference.png').pipe(new PNG()).on('parsed', doneReading);
-        let img2 = fs.createReadStream('C:/Device/compare.png').pipe(new PNG()).on('parsed', doneReading);
+        let img1 = fs.createReadStream(window.localPath + 'reference.png').pipe(new PNG()).on('parsed', doneReading);
+        let img2 = fs.createReadStream(window.localPath + 'compare.png').pipe(new PNG()).on('parsed', doneReading);
         let filesRead = 0;
         function doneReading() {
           if (++filesRead < 2) return;
@@ -42,7 +42,7 @@ export const compareImages = (base64Data)=>{
           // Util.log(px);
           img1 = null;
           img2 = null;
-          diff.pack().pipe(fs.createWriteStream('C:/Device/diff.png'));
+          diff.pack().pipe(fs.createWriteStream(window.localPath + 'diff.png'));
         }
       });
     }

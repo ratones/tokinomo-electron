@@ -47,7 +47,7 @@ export default class SelfTest {
   checkSound() {
     let self = this;
     return new Promise((resolve, reject) => {
-      Arduino.playPath('C:/Device/selftest.mp3');
+      Arduino.playPath(window.localPath + 'selftest.mp3');
       this.processAudio().then((res) => {
         if (res) {
           let interv = setInterval(() => {

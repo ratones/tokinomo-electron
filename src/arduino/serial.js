@@ -51,24 +51,24 @@ class Serial {
     initialize() {
         return new Promise((resolve) => {
             this.detectArduinoPort().then(portname=>{
-
-                const parsers = SerialPort.parsers;
-                // Use a `\r\n` as a line terminator
-                const parser = new parsers.Readline({
-                    delimiter: '\r\n'
-                });
-                const port = new SerialPort(portname, {
-                    baudRate: 57600,
-                    autoOpen:false
-                });
-                port.pipe(parser);
-                port.on('open', () => {
-                    console.log('Port open');
-                    resolve();
-                });
-                parser.on('data', this.dataReceived.bind(this));
-                this.port = port
-                port.open();
+                resolve();
+                // const parsers = SerialPort.parsers;
+                // // Use a `\r\n` as a line terminator
+                // const parser = new parsers.Readline({
+                //     delimiter: '\r\n'
+                // });
+                // const port = new SerialPort(portname, {
+                //     baudRate: 57600,
+                //     autoOpen:false
+                // });
+                // port.pipe(parser);
+                // port.on('open', () => {
+                //     console.log('Port open');
+                //     resolve();
+                // });
+                // parser.on('data', this.dataReceived.bind(this));
+                // this.port = port
+                // port.open();
             });
         });
     }

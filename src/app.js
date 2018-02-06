@@ -34,6 +34,11 @@ const osMap = {
   linux: "Linux"
 };
 
+if(process.platform == "win32"){
+  window.localPath  = 'C:/Device/';
+}else if(process.platform == 'linux'){
+  window.localPath = '/home/cristi/Device/';
+}
 
 
 document.querySelector("#app").style.display = "block";
@@ -42,6 +47,7 @@ Main.openTab('console');
 Arduino.initialize().then(()=>{
   Main.main(); // start the program after Arduino is ready
 });
+
 
 window.onbeforeunload = (e) => {
   // e.preventDefault();

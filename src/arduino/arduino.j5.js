@@ -75,19 +75,19 @@ class Arduino {
     let self = this;
     this.files = [];
     return new Promise((resolve) => {
-      fs.readdir('C:/Device/Files', (err, f) => {
+      fs.readdir(window.localPath + 'Files', (err, f) => {
         f.forEach(file => {
           console.log(file);
           self.files.push(file);
         });
         resolve();
-        self.player.src = 'c:/Device/Files/' + self.files[0];
+        self.player.src = window.localPath + 'Files/' + self.files[0];
       });
     });
   }
   playFile(index) {
     this.mutepin.high()
-    this.player.src = 'C:/Device/Files/' + this.files[index];
+    this.player.src = window.localPath + 'Files/' + this.files[index];
     this.player.play();
   }
   readVoltage() {
@@ -514,7 +514,7 @@ class Arduino {
     let dt = new Date();
     let date = dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear();
     let time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
-    fs.appendFileSync('C:/Device/activations.txt', `\r\n${activations}\t${date}\t${time}`);
+    fs.appendFileSync(window.localPath + 'activations.txt', `\r\n${activations}\t${date}\t${time}`);
     Settins.persistKey('activations', activations);
   }
 }
