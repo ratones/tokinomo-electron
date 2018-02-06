@@ -29,24 +29,24 @@ class Main{
     let self = this;
     const st = new SelfTest()
     const client = new HttpClient();
-    client.checkConnection().then((conn)=>{
-      if(conn){
+    //client.checkConnection().then((conn)=>{
+    //  if(conn){
         st.runSelfTest().then((mov)=>{
           st.destroyVideo();
           self.postStatus(mov)
         });
-      }
-      else{
-        console.log('No internet connection!');
-        self.startDevice();
-        self.tryUSBConnect();
-      }
-    })
-    .catch(ex=>{
-      console.log('No internet connection!');
-      self.startDevice();
-      self.tryUSBConnect();
-    });
+   //   }
+   //   else{
+   //     console.log('No internet connection!');
+    //    self.startDevice();
+   ////     self.tryUSBConnect();
+   //   }
+   // })
+  //  .catch(ex=>{
+    //  console.log('No internet connection!');
+   //   self.startDevice();
+   //   self.tryUSBConnect();
+   // });
   }
 
   selfCheck(){

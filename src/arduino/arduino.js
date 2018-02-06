@@ -1,6 +1,7 @@
 import Serial from './serial';
 import fs from 'fs';
 import { Settings,Patterns } from './../datamodels/status';
+import { Shared } from '../shared';
 class Arduino {
   constructor() {
     this.melodyIndex = 0;
@@ -31,20 +32,20 @@ class Arduino {
     let self = this;
     this.files = [];
     return new Promise((resolve) => {
-      fs.readdir(window.localPath + 'Files', (err, f) => {
+      fs.readdir(Shared.localPath + 'Files', (err, f) => {
         f.forEach(file => {
           console.log(file);
           self.files.push(file);
         });
         resolve();
-        self.player.src = window.localPath + 'Files/' + self.files[0];
+        self.player.src = Shared.localPath + 'Files/' + self.files[0];
       });
     });
   }
 
   playFile(index) {
     this.soundOn()
-    this.player.src = window.localPath + 'Files/' + this.files[index];
+    this.player.src = Shared.localPath + 'Files/' + this.files[index];
     this.player.play();
   }
   playPath(file) {
@@ -326,7 +327,7 @@ class Arduino {
     let dt = new Date();
     let date = dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear();
     let time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
-    fs.appendFileSync(window.localPath + 'activations.txt', `\r\n${activations}\t${date}\t${time}`);
+    fs.appendFileSync(Shared.localPath + 'activations.txt', `\r\n${activations}\t${date}\t${time}`);
     Settings.persistKey('activations', activations);
   }
 

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import HttpClient from './../network/client';
-//import sys from 'node-windows';
+import {Shared} from './../shared';
 import cp from 'child_process';
 
 export const Status = {
@@ -13,14 +13,14 @@ export const Settings = {
   data: [],
   loadSettings(){
     if(this.data.length == 0){
-      let settings = fs.readFileSync(window.localPath + 'settings.json')
+      let settings = fs.readFileSync(Shared.localPath + 'settings.json')
       this.data =  JSON.parse(settings);
     }
     return this.data;
   },
   save(data) {
     this.data = data;
-    fs.writeFileSync(window.localPath + 'settings.json', JSON.stringify(data));
+    fs.writeFileSync(Shared.localPath + 'settings.json', JSON.stringify(data));
   },
   saveServer(data) {
     const client = new HttpClient();
@@ -71,9 +71,9 @@ export const Settings = {
     }
   },
   resetDevice() {
-    fs.unlink(window.localPath + 'reference.png');
-    fs.unlink(window.localPath + 'compare.png');
-    fs.unlink(window.localPath + 'activations.txt');
+    fs.unlink(Shared.localPath + 'reference.png');
+    fs.unlink(Shared.localPath + 'compare.png');
+    fs.unlink(Shared.localPath + 'activations.txt');
     this.persistKey('activations', 0);
   }
 
@@ -82,7 +82,7 @@ export const Patterns = {
   data: [],
   getPatterns() {
     if (this.data.length == 0) {
-      let patterns = fs.readFileSync(window.localPath + 'patterns.json')
+      let patterns = fs.readFileSync(Shared.localPath + 'patterns.json')
       this.data = JSON.parse(patterns);
     }
     return this.data;
@@ -104,12 +104,12 @@ export const Patterns = {
   },
   savePatterns(data) {
     this.data = data;
-    fs.writeFileSync(window.localPath + 'patterns.json', JSON.stringify(data));
+    fs.writeFileSync(Shared.localPath + 'patterns.json', JSON.stringify(data));
   },
   runTest(fileid) {
     let fileIndex = 0;
     let fp = this.data.find(x => x.fileid == fileid);
-    fs.readdir(window.localPath + 'Files', (err, f) => {
+    fs.readdir(Shared.localPath + 'Files', (err, f) => {
       f.forEach((file, index) => {
         if (fp.filename == file) {
           fileIndex = index;

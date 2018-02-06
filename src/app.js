@@ -6,6 +6,7 @@ import "./helpers/context_menu.js";
 import "./helpers/external_links.js";
 
 import Arduino from './arduino/arduino'
+import {Shared} from './shared';
 // ----------------------------------------------------------------------------
 // Everything below is just to show you how it works. You can delete all of it.
 // ----------------------------------------------------------------------------
@@ -35,9 +36,9 @@ const osMap = {
 };
 
 if(process.platform == "win32"){
-  window.localPath  = 'C:/Device/';
+  Shared.localPath  = 'C:/Device/';
 }else if(process.platform == 'linux'){
-  window.localPath = '/home/cristi/Device/';
+  Shared.localPath = '/home/cristi/Device/';
 }
 
 

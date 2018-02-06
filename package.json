@@ -18,7 +18,14 @@
     "directories": {
       "buildResources": "resources"
     },
-    "publish": null
+    "publish": null,
+    "linux":{
+      "target":["snap"]
+    },
+    "snap":{
+      "plugs":["default","camera"]
+    }
+
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -32,10 +39,8 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "bleno": "^0.5.0",
     "fs-jetpack": "^1.0.0",
     "jquery": "^3.3.1",
-    "node-windows": "^0.1.14",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.3.1",
     "serialport": "^6.0.4",

@@ -1,6 +1,7 @@
 import {ipcRenderer} from 'electron'
 import { Settings } from '../datamodels/status';
 import Arduino from './../arduino/arduino';
+import { Shared } from '../shared';
 
 export default class Test {
   constructor() {
@@ -41,10 +42,10 @@ export default class Test {
     });
     self.audioSel.innerHTML = '';
     this.files = ipcRenderer.sendSync('sync-filelist','files');
-    // fs.readdir(window.localPath + 'Files', (err, f) => {
+    // fs.readdir(Shared.localPath + 'Files', (err, f) => {
       this.files.forEach(file => {
         let opt = document.createElement('option');
-        opt.value = window.localPath + 'Files/' + file;
+        opt.value = Shared.localPath + 'Files/' + file;
         opt.innerHTML = file;
         self.files.push(file);
         self.audioSel.appendChild(opt);
@@ -95,9 +96,9 @@ export default class Test {
 
   resetDevice() {
     Settings.resetDevice();
-    // fs.unlink(window.localPath + 'reference.png');
-    // fs.unlink(window.localPath + 'compare.png');
-    // fs.unlink(window.localPath + 'activations.txt');
+    // fs.unlink(Shared.localPath + 'reference.png');
+    // fs.unlink(Shared.localPath + 'compare.png');
+    // fs.unlink(Shared.localPath + 'activations.txt');
     // DeviceSettings.persistKey('activations', '0');
   }
 
@@ -150,7 +151,7 @@ export default class Test {
     // Arduino.bounceRandom();
   }
   getFileIndex() {
-    let file = this.audioSel.value.replace(window.localPath + 'Files/', '');
+    let file = this.audioSel.value.replace(Shared.localPath + 'Files/', '');
     let fileIndex = this.files.indexOf(file);
     return fileIndex;
   }

@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron';
 import CamHandler from './webcam';
 import { Status, Settings } from './../datamodels/status';
 import Arduino from './../arduino/arduino';
+import { Shared } from '../shared';
 
 export default class SelfTest {
   constructor() {
@@ -47,7 +48,7 @@ export default class SelfTest {
   checkSound() {
     let self = this;
     return new Promise((resolve, reject) => {
-      Arduino.playPath(window.localPath + 'selftest.mp3');
+      Arduino.playPath(Shared.localPath + 'selftest.mp3');
       this.processAudio().then((res) => {
         if (res) {
           let interv = setInterval(() => {
