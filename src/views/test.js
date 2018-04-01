@@ -125,15 +125,16 @@ export default class Test {
     // Arduino.setAlarmOne.call(Arduino, dt);
   }
   extendMotor() {
-    Arduino.motorpin.low();
-    Arduino.extendMax();
+    Arduino.melodyIndex = this.getFileIndex();
+    Arduino.runInOutRoutine();
   }
   goHomeMotor() {
     Arduino.goHome();
   }
   bounceEvenMotor() {
     Arduino.melodyIndex = this.getFileIndex();
-    Arduino.runRoutine();
+    Arduino.runBounceRoutine();
+    //Arduino.bounce();
   }
   bouncePatternMotor() {
     Arduino.melodyIndex = this.getFileIndex();
@@ -141,7 +142,8 @@ export default class Test {
   }
   bounceRandomMotor() {
     Arduino.melodyIndex = this.getFileIndex();
-    Arduino.runRandomRoutine();
+    Arduino.runBounceRandomRoutine();
+    // Arduino.bounceRandom();
   }
   getFileIndex() {
     let file = this.audioSel.value.replace('C:/Device/Files/', '');
